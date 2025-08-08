@@ -1,0 +1,417 @@
+"""
+Django base settings for pld project.
+"""
+
+from pathlib import Path
+from datetime import timedelta
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+# Build paths
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+# Security - these will be overridden in prod.py
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = False  # Default to False, dev.py will override
+ALLOWED_HOSTS = []
+
+# Application definition
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    # Third-party apps
+    'django_extensions',
+    'rest_framework',
+    'drf_yasg',
+    'rest_framework_simplejwt',
+    'corsheaders',
+    'djoser',
+
+    # Local apps
+    'apps.core',
+    'apps.user_management',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+ROOT_URLCONF = 'pld.urls'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = 'pld.wsgi.application'
+
+# Password validation
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+# Internationalization
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Custom user model
+AUTH_USER_MODEL = 'user_management.User'
+
+# REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+# JWT Settings
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'TOKEN_OBTAIN_SERIALIZER': 'apps.user_management.serializers.CustomTokenObtainPairSerializer',
+}
+
+# Djoser
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': 'reset-password-confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': 'auth/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'auth/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': False,
+    'SEND_RESET_PASSWORD_EMAIL': True,
+    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+    'EMAIL': {
+        'password_reset': 'djoser.email.PasswordResetEmail',
+        'password_changed_confirmation': 'djoser.email.PasswordChangedConfirmationEmail',
+    },
+    'SERIALIZERS': {
+        'user_create': 'apps.user_management.serializers.RegisterSerializer',
+        'user': 'apps.user_management.serializers.UserSerializer',
+        'current_user': 'apps.user_management.serializers.UserSerializer',
+    },
+}
+
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = 'PLD Associations <practicallifedevelopment2021@gmail.com>'
+
+# CORS
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWS_CREDENTIALS = True
+
+# Frontend
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+DOMAIN = os.getenv('DOMAIN', 'localhost:5173')
+SITE_NAME = 'PLD Association Website'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# """
+# Django settings for pld project.
+
+# Generated by 'django-admin startproject' using Django 5.2.4.
+
+# For more information on this file, see
+# https://docs.djangoproject.com/en/5.2/topics/settings/
+
+# For the full list of settings and their values, see
+# https://docs.djangoproject.com/en/5.2/ref/settings/
+# """
+
+# from pathlib import Path
+# from datetime import timedelta
+# from dotenv import load_dotenv
+# import os
+
+# load_dotenv()
+
+# # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# # BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+
+# # Quick-start development settings - unsuitable for production
+# # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+
+# # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = os.getenv('SECRET_KEY')
+
+# # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = True
+
+# ALLOWED_HOSTS = ["*"]
+
+
+# # Application definition
+
+# INSTALLED_APPS = [
+#     'django.contrib.admin',
+#     'django.contrib.auth',
+#     'django.contrib.contenttypes',
+#     'django.contrib.sessions',
+#     'django.contrib.messages',
+#     'django.contrib.staticfiles',
+
+#     'django_extensions',
+
+#     'rest_framework',
+#     'drf_yasg',
+#     'rest_framework_simplejwt',
+#     'corsheaders',
+
+#     'apps.core',
+#     'apps.user_management', 
+
+#      'djoser',
+# ]
+
+
+
+
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Uses SMTP protocol
+# EMAIL_HOST = 'smtp.gmail.com'  # Gmail's SMTP server address
+# EMAIL_PORT = 587  # Port for TLS encryption
+# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # Your full Gmail address
+# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # App password (see below)
+# EMAIL_USE_TLS = True  # Enables TLS encryption
+# DEFAULT_FROM_EMAIL = 'PLD Associations <practicallifedevelopment2021@gmail.com>'  # Shows in recipient's inbox
+
+
+# DJOSER = {
+#     # 'PASSWORD_RESET_CONFIRM_URL': 'password-reset-confirm/{uid}/{token}',
+#     'PASSWORD_RESET_CONFIRM_URL': 'reset-password-confirm/{uid}/{token}',
+#     'USERNAME_RESET_CONFIRM_URL': 'auth/username/reset/confirm/{uid}/{token}',
+#     'ACTIVATION_URL': 'auth/activate/{uid}/{token}',
+#     'SEND_ACTIVATION_EMAIL': False,
+#     'SEND_RESET_PASSWORD_EMAIL': True,  # Add this line
+#     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+#     'EMAIL': {
+#         'password_reset': 'djoser.email.PasswordResetEmail',
+#         'password_changed_confirmation': 'djoser.email.PasswordChangedConfirmationEmail',
+#     },
+#     'SERIALIZERS': {
+#         'user_create': 'apps.user_management.serializers.RegisterSerializer',
+#         'user': 'apps.user_management.serializers.UserSerializer',
+#         'current_user': 'apps.user_management.serializers.UserSerializer',
+#     },
+# }
+
+
+
+# MIDDLEWARE = [
+#     'django.middleware.security.SecurityMiddleware',
+#     'django.contrib.sessions.middleware.SessionMiddleware',
+#     'django.middleware.common.CommonMiddleware',
+#     'django.middleware.csrf.CsrfViewMiddleware',
+#     'django.contrib.auth.middleware.AuthenticationMiddleware',
+#     'django.contrib.messages.middleware.MessageMiddleware',
+#     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+#     'corsheaders.middleware.CorsMiddleware',
+
+#     # 'whitenoise.middleware.WhiteNoiseMiddleware', # for serving static files in production(not needed in development, but do not forget it in the productions)
+# ]
+
+# ROOT_URLCONF = 'pld.urls'
+
+
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         'DIRS': [os.path.join(BASE_DIR, 'templates')],
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#             ],
+#         },
+#     },
+# ]
+
+
+# WSGI_APPLICATION = 'pld.wsgi.application'
+
+
+# # REST_AUTHENTICATION_JWT
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ),
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.IsAuthenticated',
+#     ),
+# }
+
+
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+#     'ROTATE_REFRESH_TOKENS': True,
+#     'BLACKLIST_AFTER_ROTATION': True,
+#     'AUTH_HEADER_TYPES': ('Bearer',),
+#     'USER_ID_FIELD': 'id',
+#     'USER_ID_CLAIM': 'user_id',
+#     'TOKEN_OBTAIN_SERIALIZER': 'apps.user_management.serializers.CustomTokenObtainPairSerializer',
+
+# }
+
+
+# # SWAGGER SETTING
+# SWAGGER_SETTINGS = {
+#     'USE_SESSION_AUTH': False,  # Disable session-based authentication
+#     'SECURITY_DEFINITIONS': {
+#         'Bearer': {
+#             'type': 'apiKey',
+#             'name': 'Authorization',
+#             'in': 'header',
+#             'description': 'JWT Authorization header using the Bearer scheme. Example: "Bearer {token}"',
+#         }
+#     },
+# }
+
+
+# # Database
+# # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
+# # DATABASES = {
+# #     'default': {
+# #         'ENGINE': 'django.db.backends.sqlite3',
+# #         'NAME': BASE_DIR / 'db.sqlite3',
+# #     }
+# # }
+
+
+# # Password validation
+# # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+#     },
+# ]
+
+
+# # Internationalization
+# # https://docs.djangoproject.com/en/5.2/topics/i18n/
+
+# LANGUAGE_CODE = 'en-us'
+
+# TIME_ZONE = 'UTC'
+
+# USE_I18N = True
+
+# USE_TZ = True
+
+
+# # Static files (CSS, JavaScript, Images)
+# # https://docs.djangoproject.com/en/5.2/howto/static-files/
+
+# STATIC_URL = 'static/'
+# STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# # media files
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# # Default primary key field type
+# # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+
+# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# # REGISTERING THE ABSTRACT USER MODEL I CREATED
+# AUTH_USER_MODEL = 'user_management.User'
+
+
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWS_CREDENTIALS = True
+
+
+# FRONTEND_URL = 'http://localhost:5173'  # ← Changed to 5173
+# DOMAIN = 'localhost:5173'               # ← Changed to 5173
+# SITE_NAME = 'PLD Association Website'  # ← Changed to PLD Association Website
+
+
+# # superuser : hp16 - Aa111213?
