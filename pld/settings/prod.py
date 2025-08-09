@@ -19,11 +19,17 @@ DATABASES = {
     }
 }
 
-# Static files
-# STATIC_ROOT = '/home/yourcpanelusername/public_html/static'
-STATIC_ROOT = '/home/pldassociationor/pld_backend/staticfiles/'
-# MEDIA_ROOT = '/home/yourcpanelusername/public_html/media'
-MEDIA_ROOT = '/home/pldassociationor/pld_backend/mediafiles/'
+# Static files (replace with your actual domain)
+STATIC_URL = '/static/'
+STATIC_ROOT = '/home/pldassociationor/public_html/static'  # cPanel serves from here
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Your local static files
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/home/pldassociationor/public_html/media'  # cPanel-compatible path
+
+
+# STATIC_ROOT = '/home/pldassociationor/pld_backend/staticfiles/'
+# MEDIA_ROOT = '/home/pldassociationor/pld_backend/mediafiles/'
 
 # Security headers
 SECURE_SSL_REDIRECT = True
