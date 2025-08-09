@@ -19,14 +19,16 @@ DATABASES = {
     }
 }
 
-# Static files (replace with your actual domain)
+# Correct Static Files Configuration
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/pldassociationor/public_html/static'  # cPanel serves from here
-STATICFILES_DIRS = [BASE_DIR / 'static']  # Your local static files
+STATIC_ROOT = '/home/pldassociationor/public_html/static'  # Changed to public_html
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Your local static files
+]
 
+# Media Files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/home/pldassociationor/public_html/media'  # cPanel-compatible path
-
+MEDIA_ROOT = '/home/pldassociationor/public_html/media'
 
 # STATIC_ROOT = '/home/pldassociationor/pld_backend/staticfiles/'
 # MEDIA_ROOT = '/home/pldassociationor/pld_backend/mediafiles/'
