@@ -30,6 +30,7 @@ from rest_framework_simplejwt.views import (
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from django.views.generic import RedirectView
 
 
 schema_view = get_schema_view(
@@ -44,6 +45,9 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
+    # Redirect root URL to Swagger documentation
+    path('', RedirectView.as_view(url='/swagger/')),
+
     # Admin
     path('admin/', admin.site.urls),
 
